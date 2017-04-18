@@ -1,14 +1,12 @@
 package com.github.angads25.textanalyzer;
 
-import java.io.File;
 import java.util.Queue;
 
 public class TaskHandler implements CallBackListener {
 	private CallBackThread[] callBackThreads;
-	private Queue<File> files;
-	private int total = 0;
+	private Queue<IterableFile> files;
 	
-	public void startFeeding(Queue<File> files) {
+	public void startFeeding(Queue<IterableFile> files) {
 		this.files = files;
 		System.out.println("Queue size: "+files.size());
 		int cores = Runtime.getRuntime().availableProcessors();
@@ -19,9 +17,8 @@ public class TaskHandler implements CallBackListener {
 			thread = new CallBackThread();
 			thread.setName(i+"");
 			thread.setCallBackListener(this);
-			thread.setFile(files.remove());
+			thread.setIterableFile(files.remove());
 			thread.start();
-			total++;
 		}
 	}
 	
@@ -33,12 +30,8 @@ public class TaskHandler implements CallBackListener {
 			thread = new CallBackThread();
 			thread.setName(threadIndex+"");
 			thread.setCallBackListener(this);
-			thread.setFile(files.remove());
+			thread.setIterableFile(files.remove());
 			thread.start();
-			total++;
-		}
-		else {
-			System.out.println("Computed Files: "+total);
 		}
 	}
 }
